@@ -299,7 +299,7 @@
     display: flex; flex-direction: column;
     gap: 0; margin-top: 28px;
     border: 1px solid rgba(45,74,45,0.15);
-    border-radius: 12px; overflow: hidden;
+    border-radius: 12px;
   }
 
   .committee-row {
@@ -362,7 +362,7 @@
 
   .fee-card {
     border-radius: 14px; padding: 24px 18px;
-    position: relative; overflow: hidden;
+    position: relative;
   }
 
   .fee-card.dps {
@@ -616,8 +616,17 @@
     transition: color 0.2s;
   }
   .ql-arrow {
-    font-size: 1rem; color: var(--gold);
-    flex-shrink: 0; transition: color 0.2s;
+    width: 18px; height: 18px;
+    flex-shrink: 0;
+    border-top: 2px solid var(--gold);
+    border-right: 2px solid var(--gold);
+    border-radius: 1px;
+    transform: rotate(45deg);
+    transition: border-color 0.2s;
+    margin-top: 2px;
+  }
+  .ql-card:hover .ql-arrow {
+    border-color: var(--gold-light);
   }
 
 </style>
@@ -691,8 +700,8 @@
     </div>
     <div class="perk-card">
       <div class="perk-icon">🎙️</div>
-      <div class="perk-title">Training Sessions</div>
-      <div class="perk-desc">Public speaking & debate workshops</div>
+      <div class="perk-title">Trained OC Committee</div>
+      <div class="perk-desc">Expert organisers for all</div>
     </div>
     <div class="perk-card">
       <div class="perk-icon">🏆</div>
@@ -959,7 +968,7 @@
         <div class="ql-name">Internal Registrations</div>
         <div class="ql-desc">For DPS students only</div>
       </div>
-      <div class="ql-arrow">↗</div>
+      <div class="ql-arrow"></div>
     </a>
     <a href="#" data-link="INDIVIDUAL_REGISTRATIONS" class="ql-card" target="_blank" rel="noopener">
       <div class="ql-icon">✍️</div>
@@ -967,7 +976,7 @@
         <div class="ql-name">Individual Registrations</div>
         <div class="ql-desc">Open to all schools</div>
       </div>
-      <div class="ql-arrow">↗</div>
+      <div class="ql-arrow"></div>
     </a>
     <a href="#" data-link="INTERNATIONAL_PRESS" class="ql-card" target="_blank" rel="noopener">
       <div class="ql-icon">📰</div>
@@ -975,7 +984,7 @@
         <div class="ql-name">International Press</div>
         <div class="ql-desc">Journalists, photographers & caricaturists</div>
       </div>
-      <div class="ql-arrow">↗</div>
+      <div class="ql-arrow"></div>
     </a>
     <a href="#" data-link="PUBLIC_EYE_MATRIX" class="ql-card" target="_blank" rel="noopener">
       <div class="ql-icon">👁️</div>
@@ -983,7 +992,7 @@
         <div class="ql-name">Public Eye Matrix</div>
         <div class="ql-desc">View the matrix</div>
       </div>
-      <div class="ql-arrow">↗</div>
+      <div class="ql-arrow"></div>
     </a>
     <a href="#" data-link="BROCHURE" class="ql-card" target="_blank" rel="noopener">
       <div class="ql-icon">📄</div>
@@ -991,7 +1000,7 @@
         <div class="ql-name">DPS MUN 2026 Brochure</div>
         <div class="ql-desc">Official conference document</div>
       </div>
-      <div class="ql-arrow">↗</div>
+      <div class="ql-arrow"></div>
     </a>
     <a href="https://instagram.com/dpsmun" data-link="INSTAGRAM" class="ql-card ql-instagram" target="_blank" rel="noopener">
       <div class="ql-icon">📸</div>
@@ -999,7 +1008,7 @@
         <div class="ql-name">Instagram</div>
         <div class="ql-desc">@dpsmun — updates & announcements</div>
       </div>
-      <div class="ql-arrow">↗</div>
+      <div class="ql-arrow"></div>
     </a>
   </div>
 </section>
