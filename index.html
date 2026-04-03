@@ -52,9 +52,9 @@
   .nav-logo {
     font-family: 'Cormorant Garamond', serif;
     font-size: 1.3rem; font-weight: 700;
-    color: var(--forest); letter-spacing: 0.04em;
+    color: var(--gold); letter-spacing: 0.04em;
   }
-  .nav-logo span { color: var(--gold); }
+  .nav-logo span { color: var(--gold-light); }
   .nav-date {
     font-size: 0.68rem; font-weight: 500;
     color: var(--text-muted); letter-spacing: 0.14em;
@@ -500,7 +500,7 @@
   .contact-info { flex: 1; }
   .contact-name {
     font-size: 0.83rem; font-weight: 600;
-    color: var(--cream); margin-bottom: 2px;
+    color: var(--gold-light); margin-bottom: 2px;
   }
   .contact-role {
     font-size: 0.69rem; font-weight: 300;
@@ -547,31 +547,42 @@
   /* ══════════════════════════════════
      FLOATING CTA
   ══════════════════════════════════ */
-  .floating-cta {
-    position: fixed; bottom: 22px; left: 50%;
+  /* Shared fixed bottom container */
+  .bottom-bar {
+    position: fixed;
+    bottom: 22px;
+    left: 50%;
     transform: translateX(-50%);
-    z-index: 90;
+    z-index: 200;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    animation: floatUp 1s 1.2s both;
+    white-space: nowrap;
+  }
+  @keyframes floatUp {
+    from { opacity: 0; transform: translateX(-50%) translateY(20px); }
+    to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+  }
+  .floating-cta {
+    position: static;
+    transform: none;
+    z-index: auto;
     background: var(--gold); color: var(--forest);
     border: none; border-radius: 100px;
-    padding: 14px 34px;
+    padding: 14px 28px;
     font-family: 'Outfit', sans-serif;
     font-size: 0.78rem; font-weight: 800;
     letter-spacing: 0.12em; text-transform: uppercase;
     cursor: pointer; text-decoration: none;
     box-shadow: 0 8px 36px rgba(201,168,76,0.45);
     display: flex; align-items: center; gap: 8px;
-    white-space: nowrap;
-    animation: floatUp 1s 1.2s both;
     transition: background 0.2s, box-shadow 0.2s, transform 0.2s;
   }
   .floating-cta:hover {
     background: var(--gold-light);
-    transform: translateX(-50%) translateY(-2px);
+    transform: translateY(-2px);
     box-shadow: 0 12px 40px rgba(201,168,76,0.55);
-  }
-  @keyframes floatUp {
-    from { opacity: 0; transform: translateX(-50%) translateY(20px); }
-    to   { opacity: 1; transform: translateX(-50%) translateY(0); }
   }
 
   /* ══════════════════════════════════
@@ -703,8 +714,7 @@
      DARK MODE TOGGLE — bottom right
   ══════════════════════════════════ */
   .theme-toggle {
-    position: fixed;
-    bottom: 88px; right: 20px;
+    position: static;
     z-index: 200;
     width: 56px; height: 30px;
     background: var(--forest);
@@ -745,7 +755,9 @@
   /* WIP Toast */
   .wip-toast {
     position: fixed;
-    bottom: 130px; right: 20px;
+    bottom: 88px;
+    left: 50%;
+    transform: translateX(-50%) translateY(10px) scale(0.95);
     z-index: 300;
     background: #1a1a1a;
     color: var(--gold-light);
@@ -764,20 +776,13 @@
   }
   .wip-toast.show {
     opacity: 1;
-    transform: translateY(0) scale(1);
+    transform: translateX(-50%) translateY(0) scale(1);
     pointer-events: auto;
   }
   .wip-toast-icon { font-size: 1.2rem; display: block; margin-bottom: 4px; }
   .wip-toast-title { font-weight: 700; color: var(--gold); display: block; margin-bottom: 2px; }
 
-  @media (min-width: 640px) {
-    .theme-toggle { bottom: 96px; right: 28px; }
-    .wip-toast { bottom: 138px; right: 28px; }
-  }
-  @media (min-width: 1024px) {
-    .theme-toggle { bottom: 100px; right: 36px; }
-    .wip-toast { bottom: 144px; right: 36px; }
-  }
+
 
   /* ══════════════════════════════════
      DARK MODE OVERRIDES
@@ -948,11 +953,6 @@
   <div class="nav-logo">DPS <span>MUN</span></div>
   <div class="nav-date">9–10 May 2026</div>
 </nav>
-
-<!-- DARK MODE TOGGLE — fixed bottom right -->
-<button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
-  <div class="theme-toggle-knob" id="themeKnob">☀️</div>
-</button>
 
 <!-- WIP TOAST -->
 <div class="wip-toast" id="wipToast">
@@ -1371,8 +1371,13 @@
   <div class="footer-copy">© 2026 DPS Mohali MUN. Organised by Sorami Events.</div>
 </footer>
 
-<!-- FLOATING CTA -->
-<a href="#quicklinks" class="floating-cta">✦ Register Now</a>
+<!-- BOTTOM BAR: Register + Dark Toggle -->
+<div class="bottom-bar" id="bottomBar">
+  <a href="#quicklinks" class="floating-cta" id="floatingCta">✦ Register Now</a>
+  <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+    <div class="theme-toggle-knob" id="themeKnob">☀️</div>
+  </button>
+</div>
 
 <script>
   // ─────────────────────────────────────────────
@@ -1441,13 +1446,13 @@
   }, { threshold: 0.08 });
   reveals.forEach(r => obs.observe(r));
 
-  // Hide floating CTA near footer
-  const floatBtn = document.querySelector('.floating-cta');
-  const footerEl = document.querySelector('footer');
+  // Hide bottom bar near footer
+  const bottomBar = document.getElementById('bottomBar');
+  const footerEl  = document.querySelector('footer');
   window.addEventListener('scroll', () => {
     const footerTop = footerEl.getBoundingClientRect().top;
-    floatBtn.style.opacity = footerTop < 100 ? '0' : '1';
-    floatBtn.style.pointerEvents = footerTop < 100 ? 'none' : 'auto';
+    bottomBar.style.opacity = footerTop < 80 ? '0' : '1';
+    bottomBar.style.pointerEvents = footerTop < 80 ? 'none' : 'auto';
   });
 </script>
 </body>
