@@ -21,7 +21,7 @@
   }
 
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  html { scroll-behavior: smooth; }
+  html { scroll-behavior: smooth; background: #0e0e0e; }
 
   body {
     font-family: 'Outfit', sans-serif;
@@ -698,6 +698,145 @@
     .hero { min-height: auto; padding: 100px 32px 48px; justify-content: center; }
     .floating-cta { bottom: 12px; padding: 11px 28px; font-size: 0.72rem; }
   }
+
+  /* ══════════════════════════════════
+     DARK MODE TOGGLE BUTTON
+  ══════════════════════════════════ */
+  .theme-toggle {
+    position: fixed; top: 14px; right: 20px; z-index: 200;
+    width: 52px; height: 28px;
+    background: var(--forest);
+    border: 2px solid rgba(201,168,76,0.4);
+    border-radius: 100px;
+    cursor: pointer;
+    display: flex; align-items: center;
+    padding: 2px;
+    transition: background 0.35s, border-color 0.35s;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.18);
+  }
+  .theme-toggle:hover { border-color: var(--gold); }
+  .theme-toggle-knob {
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    background: var(--gold);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.65rem;
+    transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1), background 0.35s;
+    transform: translateX(0);
+    box-shadow: 0 1px 4px rgba(0,0,0,0.25);
+    user-select: none;
+  }
+  body.dark .theme-toggle-knob {
+    transform: translateX(22px);
+    background: var(--charcoal);
+  }
+  body.dark .theme-toggle {
+    background: #1a2a1a;
+    border-color: rgba(201,168,76,0.5);
+  }
+
+  /* ══════════════════════════════════
+     DARK MODE OVERRIDES
+  ══════════════════════════════════ */
+  body.dark {
+    --cream: #1c1c1c;
+    --cream-dark: #252525;
+    --charcoal: #e8e3d8;
+    --text-muted: #9a9585;
+    background: #1c1c1c;
+  }
+
+  /* nav */
+  body.dark nav {
+    background: rgba(20,20,20,0.95);
+    border-bottom-color: rgba(201,168,76,0.15);
+  }
+
+  /* about stats cells */
+  body.dark .stat-cell { background: #1c1c1c; }
+  body.dark .about-stats {
+    background: rgba(201,168,76,0.08);
+    border-color: rgba(201,168,76,0.12);
+  }
+
+  /* committees */
+  body.dark .committees { background: #222; }
+  body.dark .committee-row {
+    background: #2a2a2a;
+    border-bottom-color: rgba(255,255,255,0.05);
+  }
+  body.dark .committee-row:hover { background: #313131; }
+  body.dark .committee-name { color: var(--gold-light); }
+  body.dark .committees-list { border-color: rgba(255,255,255,0.07); }
+
+  /* fees */
+  body.dark .fee-card.external {
+    background: #2a2a2a;
+    border-color: rgba(201,168,76,0.2);
+  }
+  body.dark .fee-card.external .fee-amount { color: var(--gold-light); }
+  body.dark .fees-note {
+    background: rgba(201,168,76,0.06);
+    color: #9a9585;
+  }
+
+  /* quick links */
+  body.dark .quicklinks { background: #222; }
+  body.dark .ql-card {
+    background: #2a2a2a;
+    border-color: rgba(255,255,255,0.07);
+  }
+  body.dark .ql-card:hover {
+    background: var(--forest);
+    border-color: var(--forest-mid);
+  }
+  body.dark .ql-name { color: var(--gold-light); }
+  body.dark .ql-icon { background: rgba(201,168,76,0.1); }
+  body.dark .ql-card.ql-instagram {
+    background: rgba(201,168,76,0.05);
+    border-color: rgba(201,168,76,0.2);
+  }
+
+  /* about section */
+  body.dark .about { background: #1c1c1c; }
+
+  /* fees section */
+  body.dark .fees { background: #1c1c1c; }
+
+  /* contact */
+  body.dark .contact { background: #111; }
+
+  /* footer */
+  body.dark footer { background: #080808; }
+
+  /* nav logo stays same (already forest/gold) */
+  body.dark .nav-logo { color: var(--gold-light); }
+
+  /* section titles */
+  body.dark .section-title { color: var(--gold-light); }
+  body.dark .about .section-title { color: var(--gold-light); }
+  body.dark .fees .section-title { color: var(--gold-light); }
+  body.dark .quicklinks .section-title { color: var(--gold-light); }
+
+  /* ornament divider */
+  body.dark .ornament::before,
+  body.dark .ornament::after { background: rgba(201,168,76,0.2); }
+
+  /* btn-full */
+  body.dark .btn-full {
+    background: #2d4a2d;
+    border: 1px solid rgba(201,168,76,0.25);
+  }
+  body.dark .btn-full:hover { background: #3d6b3d; }
+
+  /* floating cta stays gold — already fine */
+
+  @media (min-width: 1024px) {
+    .theme-toggle { top: 18px; right: 64px; }
+  }
+  @media (min-width: 640px) and (max-width: 1023px) {
+    .theme-toggle { top: 16px; right: 40px; }
+  }
 </style>
 </head>
 <body>
@@ -707,6 +846,11 @@
   <div class="nav-logo">DPS <span>MUN</span></div>
   <div class="nav-date">9–10 May 2026</div>
 </nav>
+
+<!-- DARK MODE TOGGLE -->
+<button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+  <div class="theme-toggle-knob" id="themeKnob">☀️</div>
+</button>
 
 <!-- HERO -->
 <section class="hero">
@@ -1153,6 +1297,20 @@
   } else {
     wireLinks();
   }
+
+  // Dark mode toggle
+  const toggle = document.getElementById('themeToggle');
+  const knob = document.getElementById('themeKnob');
+  const saved = localStorage.getItem('theme');
+  if (saved === 'dark') {
+    document.body.classList.add('dark');
+    knob.textContent = '🌙';
+  }
+  toggle.addEventListener('click', () => {
+    const isDark = document.body.classList.toggle('dark');
+    knob.textContent = isDark ? '🌙' : '☀️';
+    localStorage.setItem('theme', isDark ? 'dark' : 'light');
+  });
 
   // Reveal on scroll
   const reveals = document.querySelectorAll('.reveal');
