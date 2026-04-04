@@ -182,6 +182,75 @@
   }
 
   /* ══════════════════════════════════
+     COUNTDOWN (NAV)
+  ══════════════════════════════════ */
+  .nav-right {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    margin-top: 1px;
+  }
+  .nav-date-sub {
+    font-size: 0.58rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+  }
+  body.dark .nav-date-sub {
+    color: var(--gold-light);
+    opacity: 0.6;
+  }
+  .nav-countdown {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(18, 18, 18, 0.85);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid rgba(201, 168, 76, 0.5);
+    border-radius: 8px;
+    padding: 6px 14px;
+    box-shadow: 0 0 24px rgba(201, 168, 76, 0.55), inset 0 0 12px rgba(201, 168, 76, 0.25);
+    transition: all 0.3s ease;
+  }
+  .nav-countdown:hover {
+    box-shadow: 0 0 32px rgba(201, 168, 76, 0.75), inset 0 0 16px rgba(201, 168, 76, 0.35);
+    border-color: rgba(201, 168, 76, 0.9);
+  }
+  .cd-item {
+    display: flex;
+    align-items: baseline;
+    gap: 3px;
+  }
+  .cd-item span:first-child {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--cream);
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+    letter-spacing: 0.05em;
+  }
+  .cd-unit {
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.55rem;
+    font-weight: 600;
+    color: var(--gold-light);
+    text-transform: uppercase;
+  }
+  .cd-sep {
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: rgba(201,168,76,0.6);
+    line-height: 1;
+    margin: 0 2px;
+    transform: translateY(-1px);
+  }
+
+  /* ══════════════════════════════════
      SECTION BASE
   ══════════════════════════════════ */
   section { padding: 64px 20px 72px; }
@@ -657,6 +726,11 @@
     .btn-primary, .btn-secondary { width: 100%; }
     .fee-amount { font-size: 1.8rem; }
     .floating-cta { padding: 10px 18px; font-size: 0.68rem; }
+    
+    .nav-countdown { padding: 4px 8px; gap: 4px; }
+    .cd-item span:first-child { font-size: 0.95rem; }
+    .cd-unit { font-size: 0.5rem; }
+    .cd-sep { font-size: 0.8rem; margin: 0 1px; }
   }
 
   /* ══════════════════════════════════
@@ -671,6 +745,11 @@
     .quicklinks-list { grid-template-columns: repeat(2, 1fr); }
     .contact-list { display: grid; grid-template-columns: repeat(2, 1fr); }
     .fee-amount { font-size: 2.4rem; }
+    
+    .nav-countdown { padding: 6px 12px; gap: 6px; }
+    .cd-item span:first-child { font-size: 1.15rem; }
+    .cd-unit { font-size: 0.55rem; }
+    .cd-sep { font-size: 0.9rem; margin: 0 2px; }
   }
 
   /* ══════════════════════════════════
@@ -709,6 +788,11 @@
     .hero-subtitle { font-size: 0.88rem; }
     .hero-actions { max-width: 440px; }
     .btn-primary, .btn-secondary { font-size: 0.88rem; padding: 17px 30px; }
+
+    .nav-countdown { padding: 7px 16px; gap: 8px; }
+    .cd-item span:first-child { font-size: 1.25rem; letter-spacing: 0.06em; }
+    .cd-unit { font-size: 0.6rem; }
+    .cd-sep { font-size: 1rem; margin: 0 3px; }
 
     /* about two-col */
     .about-inner {
@@ -948,37 +1032,6 @@
     border-color: rgba(201,168,76,0.5);
   }
 
-  /* WIP Toast */
-  .wip-toast {
-    position: fixed;
-    bottom: 88px;
-    left: 50%;
-    transform: translateX(-50%) translateY(10px) scale(0.95);
-    z-index: 300;
-    background: #1a1a1a;
-    color: var(--gold-light);
-    border: 1px solid rgba(201,168,76,0.35);
-    border-radius: 12px;
-    padding: 12px 16px;
-    font-size: 0.72rem; font-weight: 500;
-    line-height: 1.5;
-    max-width: 200px;
-    text-align: center;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.4);
-    opacity: 0;
-    transform: translateY(10px) scale(0.95);
-    transition: opacity 0.3s ease, transform 0.3s ease;
-    pointer-events: none;
-  }
-  .wip-toast.show {
-    opacity: 1;
-    transform: translateX(-50%) translateY(0) scale(1);
-    pointer-events: auto;
-  }
-  .wip-toast-icon { font-size: 1.25rem; display: block; margin-bottom: 4px; color: var(--gold); }
-  .wip-toast-title { font-weight: 700; color: var(--gold); display: block; margin-bottom: 2px; }
-
-
   /* ══════════════════════════════════
      DARK MODE OVERRIDES
   ══════════════════════════════════ */
@@ -1025,7 +1078,15 @@
     background: linear-gradient(90deg, transparent, rgba(201,168,76,0.15), transparent);
   }
   /* Dark mode nav logo handling can be added here if needed (e.g. filter: invert) */
-  body.dark .nav-date { color: #6a6560; }
+  
+  /* Countdown dark mode colors */
+  body.dark .cd-item span:first-child {
+    color: var(--gold-light); 
+    text-shadow: 0 0 8px rgba(232, 201, 122, 0.4);
+  }
+  body.dark .cd-unit {
+    color: #e8e3d8; 
+  }
 
   /* hero — keep as-is (already dark forest) but tweak gradient */
   body.dark .hero {

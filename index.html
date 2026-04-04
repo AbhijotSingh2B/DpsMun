@@ -57,20 +57,26 @@
   <script defer src="/_vercel/speed-insights/script.js"></script>
 </head>
 
-<body>
+<body class="dark">
 
   <!-- NAV -->
   <nav>
     <img src="Media/DPS_MUN.svg" alt="DPS MUN Logo" class="nav-logo-img">
-    <div class="nav-date">9–10 May 2026</div>
+    
+    <div class="nav-right">
+      <!-- Countdown (Nav) -->
+      <div class="nav-countdown" id="countdown">
+        <div class="cd-item"><span id="cd-days">00</span><span class="cd-unit">D</span></div>
+        <div class="cd-sep">:</div>
+        <div class="cd-item"><span id="cd-hours">00</span><span class="cd-unit">H</span></div>
+        <div class="cd-sep">:</div>
+        <div class="cd-item"><span id="cd-mins">00</span><span class="cd-unit">M</span></div>
+        <div class="cd-sep">:</div>
+        <div class="cd-item"><span id="cd-secs">00</span><span class="cd-unit">S</span></div>
+      </div>
+      <div class="nav-date-sub">9–10 May 2026</div>
+    </div>
   </nav>
-
-  <!-- WIP TOAST -->
-  <div class="wip-toast" id="wipToast">
-    <span class="wip-toast-icon"><i class="ph ph-warning"></i></span>
-    <span class="wip-toast-title">Work in Progress</span>
-    Dark mode is still being refined
-  </div>
 
   <!-- HERO -->
   <section class="hero">
@@ -83,6 +89,7 @@
       MUN
     </h1>
     <p class="hero-subtitle">Model United Nations 2026</p>
+
     <div class="hero-actions">
       <a href="#quicklinks" class="btn-primary">✦ Register Now</a>
       <a href="#committees" class="btn-secondary">Committees</a>

@@ -30,20 +30,52 @@
     wireLinks();
   }
 
+  // ─────────────────────────────────────────────
+  //  COUNTDOWN
+  // ─────────────────────────────────────────────
+  const targetDate = new Date('May 9, 2026 09:00:00').getTime();
+  const cdDays = document.getElementById('cd-days');
+  const cdHours = document.getElementById('cd-hours');
+  const cdMins = document.getElementById('cd-mins');
+  const cdSecs = document.getElementById('cd-secs');
+
+  function updateCountdown() {
+    if (!cdDays || !cdHours || !cdMins || !cdSecs) return;
+    
+    const now = new Date().getTime();
+    const distance = targetDate - now;
+
+    if (distance < 0) {
+      const cdEl = document.getElementById('countdown');
+      if (cdEl) cdEl.style.display = 'none';
+      return;
+    }
+
+    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+    cdDays.textContent = days.toString().padStart(2, '0');
+    cdHours.textContent = hours.toString().padStart(2, '0');
+    cdMins.textContent = minutes.toString().padStart(2, '0');
+    cdSecs.textContent = seconds.toString().padStart(2, '0');
+  }
+
+  if (document.getElementById('countdown')) {
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+  }
+
   // Dark mode toggle
   const toggle = document.getElementById('themeToggle');
   const knob   = document.getElementById('themeKnob');
-  const toast  = document.getElementById('wipToast');
-  let toastTimer = null;
-
-  function showToast() {
-    toast.classList.add('show');
-    clearTimeout(toastTimer);
-    toastTimer = setTimeout(() => toast.classList.remove('show'), 3000);
-  }
 
   const saved = localStorage.getItem('theme');
-  if (saved === 'dark') {
+  if (saved === 'light') {
+    document.body.classList.remove('dark');
+    knob.textContent = '☀️';
+  } else {
     document.body.classList.add('dark');
     knob.textContent = '🌙';
   }
@@ -54,7 +86,6 @@
     const isDark = document.body.classList.toggle('dark');
     knob.textContent = isDark ? '🌙' : '☀️';
     localStorage.setItem('theme', isDark ? 'dark' : 'light');
-    showToast();
     // Remove after transition completes to avoid interfering with other animations
     setTimeout(() => document.body.classList.remove('theme-transitioning'), 400);
   });
