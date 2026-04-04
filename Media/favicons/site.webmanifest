@@ -1,0 +1,21 @@
+{
+  "name": "DPS MUN",
+  "short_name": "MUN",
+  "icons": [
+    {
+      "src": "/media/favicons/web-app-manifest-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/media/favicons/web-app-manifest-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "theme_color": "#1a8607",
+  "background_color": "#359c17",
+  "display": "standalone"
+}
