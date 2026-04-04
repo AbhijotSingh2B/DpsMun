@@ -209,16 +209,16 @@
     gap: 8px;
     opacity: 0;
     visibility: hidden;
-    transform: translateY(6px); /* Start slightly lower */
-    /* Leave animation: fast fade out */
-    transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.3s;
+    transform: translateY(4px); /* Tighter slide */
+    /* Leave animation: extremely fast fade out */
+    transition: opacity 0.15s ease, transform 0.15s ease-in, visibility 0.15s;
   }
   .cd-view.active {
     opacity: 1;
     visibility: visible;
     transform: translateY(0);
-    /* Enter animation: delayed so the other one leaves first */
-    transition: opacity 0.4s ease 0.3s, transform 0.4s cubic-bezier(0.4, 0, 0.2, 1) 0.3s, visibility 0s 0.3s;
+    /* Enter animation: short delay to prevent crossover, then snappy entrance */
+    transition: opacity 0.2s ease-out 0.12s, transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.2) 0.12s, visibility 0s 0.12s;
   }
   #cd-date-view span {
     font-family: 'Outfit', sans-serif;

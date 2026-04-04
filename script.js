@@ -42,8 +42,8 @@
   function updateCountdown() {
     if (!cdDays || !cdHours || !cdMins || !cdSecs) return;
     
-    const now = new Date().getTime();
-    const distance = targetDate - now;
+    const now = new Date();
+    const distance = targetDate - now.getTime();
 
     if (distance < 0) {
       const cdEl = document.getElementById('countdown');
@@ -60,21 +60,34 @@
     cdHours.textContent = hours.toString().padStart(2, '0');
     cdMins.textContent = minutes.toString().padStart(2, '0');
     cdSecs.textContent = seconds.toString().padStart(2, '0');
+
+    // Toggle active views based exactly on the absolute countdown second digit
+    const secDigit = seconds % 10;
+    const timerView = document.getElementById('cd-timer-view');
+    const dateView = document.getElementById('cd-date-view');
+    
+    if (timerView && dateView) {
+      // Switches precisely when the countdown digit hits 0 or 5
+      // 0, 9, 8, 7, 6 -> Timer
+      // 5, 4, 3, 2, 1 -> Date
+      if (secDigit >= 6 || secDigit === 0) {
+        timerView.classList.add('active');
+        dateView.classList.remove('active');
+      } else {
+        dateView.classList.add('active');
+        timerView.classList.remove('active');
+      }
+    }
   }
 
   if (document.getElementById('countdown')) {
-    updateCountdown();
-    setInterval(updateCountdown, 1000);
-    
-    // Toggle between timer and date views every 5 seconds
-    const timerView = document.getElementById('cd-timer-view');
-    const dateView = document.getElementById('cd-date-view');
-    if (timerView && dateView) {
-      setInterval(() => {
-        timerView.classList.toggle('active');
-        dateView.classList.toggle('active');
-      }, 5000);
+    function exactTick() {
+      updateCountdown();
+      // Calculate precise ms until the next full second to ensure all devices tick perfectly in sync
+      const delay = 1000 - (new Date().getTime() % 1000);
+      setTimeout(exactTick, delay);
     }
+    exactTick();
   }
 
   // Dark mode toggle
