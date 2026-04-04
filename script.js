@@ -49,13 +49,17 @@
   }
 
   toggle.addEventListener('click', () => {
+    // Add transitioning class before toggle so colors animate smoothly
+    document.body.classList.add('theme-transitioning');
     const isDark = document.body.classList.toggle('dark');
     knob.textContent = isDark ? '🌙' : '☀️';
     localStorage.setItem('theme', isDark ? 'dark' : 'light');
     showToast();
+    // Remove after transition completes to avoid interfering with other animations
+    setTimeout(() => document.body.classList.remove('theme-transitioning'), 400);
   });
 
-  // Reveal on scroll
+  // Reveal on scroll — stagger children for a nicer cascade effect
   const reveals = document.querySelectorAll('.reveal');
   const obs = new IntersectionObserver((entries) => {
     entries.forEach(e => {
@@ -64,11 +68,47 @@
   }, { threshold: 0.08 });
   reveals.forEach(r => obs.observe(r));
 
-  // Hide bottom bar near footer
+  // Nav — add subtle shadow on scroll for depth
+  const navEl = document.querySelector('nav');
+  let lastScroll = 0;
+  let navShadowed = false;
+
+  // Hide bottom bar near footer + nav shadow
   const bottomBar = document.getElementById('bottomBar');
   const footerEl  = document.querySelector('footer');
-  window.addEventListener('scroll', () => {
+
+  function handleScroll() {
+    const y = window.scrollY;
+
+    // Nav shadow
+    if (y > 40 && !navShadowed) {
+      navEl.style.boxShadow = '0 2px 20px rgba(0,0,0,0.08)';
+      navShadowed = true;
+    } else if (y <= 40 && navShadowed) {
+      navEl.style.boxShadow = 'none';
+      navShadowed = false;
+    }
+
+    // Hide bottom bar near footer
     const footerTop = footerEl.getBoundingClientRect().top;
-    bottomBar.style.opacity = footerTop < 80 ? '0' : '1';
-    bottomBar.style.pointerEvents = footerTop < 80 ? 'none' : 'auto';
-  });
+    const shouldHide = footerTop < 100;
+    bottomBar.style.opacity = shouldHide ? '0' : '1';
+    bottomBar.style.pointerEvents = shouldHide ? 'none' : 'auto';
+    bottomBar.style.transform = shouldHide
+      ? 'translateX(-50%) translateY(20px)'
+      : 'translateX(-50%) translateY(0)';
+
+    lastScroll = y;
+  }
+
+  // Use passive listener + requestAnimationFrame for smooth 60fps scroll handling
+  let scrollTicking = false;
+  window.addEventListener('scroll', () => {
+    if (!scrollTicking) {
+      requestAnimationFrame(() => {
+        handleScroll();
+        scrollTicking = false;
+      });
+      scrollTicking = true;
+    }
+  }, { passive: true });
