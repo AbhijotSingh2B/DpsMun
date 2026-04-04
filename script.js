@@ -65,6 +65,16 @@
   if (document.getElementById('countdown')) {
     updateCountdown();
     setInterval(updateCountdown, 1000);
+    
+    // Toggle between timer and date views every 5 seconds
+    const timerView = document.getElementById('cd-timer-view');
+    const dateView = document.getElementById('cd-date-view');
+    if (timerView && dateView) {
+      setInterval(() => {
+        timerView.classList.toggle('active');
+        dateView.classList.toggle('active');
+      }, 5000);
+    }
   }
 
   // Dark mode toggle
