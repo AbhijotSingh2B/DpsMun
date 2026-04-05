@@ -36,20 +36,24 @@
      NAV
   ══════════════════════════════════ */
   nav {
-    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
     display: flex; align-items: center; justify-content: space-between;
     padding: 6px 20px;
     /* Extend nav background up behind the iPhone notch / Dynamic Island */
     padding-top: calc(6px + env(safe-area-inset-top));
-    background: rgba(245,240,232,0.82);
+    background: rgba(245,240,232,0.65);
     backdrop-filter: blur(20px) saturate(1.4);
     -webkit-backdrop-filter: blur(20px) saturate(1.4);
     border-bottom: 1px solid rgba(45,74,45,0.08);
     transition: background 0.3s, border-color 0.3s, box-shadow 0.3s;
-    /* Safari: promote to own GPU layer without creating a new containing block */
+    /* Safari: force nav onto its own top-priority GPU compositing layer.
+       translate3d(0,0,0) is safe here because no children are position:fixed. */
+    -webkit-transform: translate3d(0,0,0);
+    transform: translate3d(0,0,0);
     will-change: transform;
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
+    isolation: isolate;
   }
   nav::after {
     content: '';
@@ -77,6 +81,10 @@
     justify-content: flex-end;
     padding: 70px 24px 100px;
     position: relative; overflow: hidden;
+    /* Safari fix: contain children's GPU compositing layers so they cannot
+       bleed above the nav bar's stacking context during scroll */
+    isolation: isolate;
+    z-index: 0;
   }
   .hero-bg {
     position: absolute; inset: 0;
@@ -195,7 +203,7 @@
     grid-template-areas: "layer";
     justify-items: center;
     align-items: center;
-    background: rgba(18, 18, 18, 0.85);
+    background: rgba(18, 18, 18, 0.65);
     backdrop-filter: blur(14px);
     -webkit-backdrop-filter: blur(14px);
     border: 1px solid rgba(201, 168, 76, 0.5);
@@ -686,7 +694,7 @@
     animation: floatUp 1s 1.2s both;
     white-space: nowrap;
     /* Glassmorphism pill container */
-    background: rgba(15, 15, 15, 0.65);
+    background: rgba(15, 15, 15, 0.45);
     backdrop-filter: blur(16px) saturate(1.3);
     -webkit-backdrop-filter: blur(16px) saturate(1.3);
     border: 1px solid rgba(201,168,76,0.2);
