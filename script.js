@@ -33,7 +33,27 @@
   // ─────────────────────────────────────────────
   //  COUNTDOWN
   // ─────────────────────────────────────────────
-  const targetDate = new Date('May 9, 2026 09:00:00').getTime();
+  // Explicitly parsed as IST (UTC+05:30) at precisely midnight (12:00 AM) on May 9th
+  const targetDate = new Date('2026-05-09T00:00:00+05:30').getTime();
+  
+  // timeOffset corrects the user's local device clock if it's incorrect or out of sync
+  let timeOffset = 0;
+  
+  // Fetch current time directly from the website's server (network sync)
+  async function syncLocalTime() {
+    try {
+      const res = await fetch(window.location.href, { method: 'HEAD', cache: 'no-store' });
+      const dateHeader = res.headers.get('date');
+      if (dateHeader) {
+        const serverTime = new Date(dateHeader).getTime();
+        timeOffset = serverTime - Date.now();
+      }
+    } catch (e) {
+      console.warn("Time sync failed, falling back to local clock.");
+    }
+  }
+  syncLocalTime();
+
   const cdDays = document.getElementById('cd-days');
   const cdHours = document.getElementById('cd-hours');
   const cdMins = document.getElementById('cd-mins');
@@ -42,8 +62,8 @@
   function updateCountdown() {
     if (!cdDays || !cdHours || !cdMins || !cdSecs) return;
     
-    const now = new Date();
-    const distance = targetDate - now.getTime();
+    const nowTime = Date.now() + timeOffset;
+    const distance = targetDate - nowTime;
 
     if (distance < 0) {
       const cdEl = document.getElementById('countdown');
@@ -81,13 +101,15 @@
   }
 
   if (document.getElementById('countdown')) {
-    function exactTick() {
+    // Self-correcting loop: after each tick, schedules the next one for the
+    // exact millisecond the real wall-clock second changes — drift can never
+    // accumulate the way it does with a plain setInterval.
+    function scheduleTick() {
       updateCountdown();
-      // Calculate precise ms until the next full second to ensure all devices tick perfectly in sync
-      const delay = 1000 - (new Date().getTime() % 1000);
-      setTimeout(exactTick, delay);
+      const msToNextSecond = 1000 - ((Date.now() + timeOffset) % 1000);
+      setTimeout(scheduleTick, msToNextSecond);
     }
-    exactTick();
+    scheduleTick();
   }
 
   // Dark mode toggle
